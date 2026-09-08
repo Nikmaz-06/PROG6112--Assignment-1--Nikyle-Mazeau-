@@ -9,12 +9,24 @@ public class HospitalSystem {
 
     // Stores all registered patients while the program is running.
     private ArrayList<Patient> patients;
+    
+    // Stores the beds in the 4x5 layout 
+private String[][] beds;
 
-    // Constructor.
-    public HospitalSystem() {
-        patients = new ArrayList<>();
-    }
+// Stores the Patient ID occupying each bed
+// A null value means that the bed is available and ready to be used
+private String[][] bedOccupants;
 
+  public HospitalSystem() {
+
+    patients = new ArrayList<>();
+
+    // Create the 4 x 5 hospital ward.
+    beds = new String[4][5];
+    bedOccupants = new String[4][5];
+
+    initialiseBeds();
+}
     /**
      * Registers a new patient.
      * Returns false if the Patient ID already exists.
@@ -114,10 +126,224 @@ public class HospitalSystem {
     }
 
     /**
-     * Returns the ArrayList of patients.
-     * This will be useful later for reports and sorting.
+     * Returns the ArrayList of patients
      */
     public ArrayList<Patient> getPatients() {
         return patients;
     }
+    
+    /**
+ * Creates bed numbers B01 to B20 using 4x5 layout
+ */
+private void initialiseBeds() {
+
+    int bedNumber = 1;
+
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            beds[row][column] =
+                    String.format("B%02d", bedNumber);
+
+            bedNumber++;
+        }
+    }
+}
+
+/**
+ * Allocates a bed to an inpatient.
+ * Returns false if criteria is not met
+ */
+public boolean allocateBed(String patientId, String bedNumber) {
+
+    Patient patient = searchPatient(patientId);
+
+    // Check that the patient exists and is an inpatient.
+    if (!(patient instanceof Inpatient)) {
+        return false;
+    }
+
+    Inpatient inpatient = (Inpatient) patient;
+
+    // Prevent one inpatient from receiving multiple beds.
+    if (inpatient.getBedNumber() != null) {
+        return false;
+    }
+
+    // Search the 2D array for the requested bed.
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            if (beds[row][column].equalsIgnoreCase(bedNumber)) {
+
+                // Bed is already occupied.
+                if (bedOccupants[row][column] != null) {
+                    return false;
+                }
+
+                // Allocate the bed.
+                bedOccupants[row][column] = patientId;
+                inpatient.setBedNumber(beds[row][column]);
+
+                return true;
+            }
+        }
+    }
+
+    // Bed number was not found.
+    return false;
+}
+
+/**
+ * Releases the bed that belongs the an inpatient.
+ */
+public boolean releaseBed(String patientId) {
+
+    Patient patient = searchPatient(patientId);
+
+    if (!(patient instanceof Inpatient)) {
+        return false;
+    }
+
+    Inpatient inpatient = (Inpatient) patient;
+
+    // Patient does not have a bed.
+    if (inpatient.getBedNumber() == null) {
+        return false;
+    }
+
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            if (patientId.equalsIgnoreCase(
+                    bedOccupants[row][column])) {
+
+                bedOccupants[row][column] = null;
+                inpatient.setBedNumber(null);
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Displays the 4x5 hospital ward.
+ */
+public void displayWardLayout() {
+
+    System.out.println("\n========== WARD LAYOUT ==========");
+
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            if (bedOccupants[row][column] == null) {
+
+                System.out.printf(
+                        "%-15s",
+                        beds[row][column] + " [Available]");
+
+            } else {
+
+                System.out.printf(
+                        "%-15s",
+                        beds[row][column] + " [Occupied]");
+            }
+        }
+
+        System.out.println();
+    }
+}
+
+/**
+ * Displays all currently available beds.
+ */
+public void displayAvailableBeds() {
+
+    System.out.println("\n--- AVAILABLE BEDS ---");
+
+    boolean found = false;
+
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            if (bedOccupants[row][column] == null) {
+
+                System.out.print(beds[row][column] + " ");
+                found = true;
+            }
+        }
+    }
+
+    if (!found) {
+        System.out.print("No beds available.");
+    }
+
+    System.out.println();
+}
+
+/**
+ * Displays all occupied beds and their Patient IDs.
+ */
+public void displayOccupiedBeds() {
+
+    System.out.println("\n--- OCCUPIED BEDS ---");
+
+    boolean found = false;
+
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            if (bedOccupants[row][column] != null) {
+
+                System.out.println(
+                        beds[row][column]
+                        + " - Patient ID: "
+                        + bedOccupants[row][column]);
+
+                found = true;
+            }
+        }
+    }
+
+    if (!found) {
+        System.out.println("No beds are currently occupied.");
+    }
+}
+
+/**
+ * Returns the number of occupied hospital beds.
+ */
+public int getOccupiedBedCount() {
+
+    int count = 0;
+
+    for (int row = 0; row < beds.length; row++) {
+
+        for (int column = 0; column < beds[row].length; column++) {
+
+            if (bedOccupants[row][column] != null) {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
+/**
+ * Checks whether any hospital beds are available.
+ */
+public boolean bedsAvailable() {
+
+    return getOccupiedBedCount() < 20;
+}
 }

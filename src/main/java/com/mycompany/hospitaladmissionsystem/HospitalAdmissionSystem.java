@@ -19,32 +19,36 @@ public class HospitalAdmissionSystem {
     System.out.println("   MEDICARE HOSPITAL ADMISSION SYSTEM");
     System.out.println("==========================================");
 
-    while (choice != 3) {
+    while (choice != 4) {
 
         displayMainMenu();
 
         try {
             choice = Integer.parseInt(scanner.nextLine());
 
-            switch (choice) {
+           switch (choice) {
 
-                case 1:
-                    patientManagementMenu();
-                    break;
+    case 1:
+        patientManagementMenu();
+        break;
 
-                case 2:
-                    bedManagementMenu();
-                    break;
+    case 2:
+        bedManagementMenu();
+        break;
 
-                case 3:
-                    System.out.println("\nExiting MediCare Hospital System...");
-                    System.out.println("Goodbye!");
-                    break;
+    case 3:
+        reportsMenu();
+        break;
 
-                default:
-                    System.out.println(
-                            "\nInvalid option. Please select 1 to 3.");
-            }
+    case 4:
+        System.out.println("\nExiting MediCare Hospital System...");
+        System.out.println("Goodbye!");
+        break;
+
+    default:
+        System.out.println(
+                "\nInvalid option. Please select 1 to 4.");
+}
 
         } catch (NumberFormatException e) {
             System.out.println(
@@ -60,7 +64,8 @@ public static void displayMainMenu() {
     System.out.println("\n=============== MAIN MENU ===============");
     System.out.println("1. Patient Management");
     System.out.println("2. Bed Management");
-    System.out.println("3. Exit");
+    System.out.println("3. Reports");
+    System.out.println("4. Exit");
     System.out.print("Select an option: ");
 }
 
@@ -484,7 +489,7 @@ public static void allocateBed() {
 }
 
 /**
- * Releases the bed occupied by an inpatient.
+ * Releases the bed occupied by an inpatient method.
  */
 public static void releaseBed() {
 
@@ -525,6 +530,76 @@ public static void releaseBed() {
 
         System.out.println(
                 "The bed could not be released.");
+    }
+}
+
+/**
+ * Displays the reports menu method.*/
+public static void reportsMenu() {
+
+    int choice = 0;
+
+    while (choice != 7) {
+
+        System.out.println("\n============== REPORTS ==============");
+        System.out.println("1. Display All Patients");
+        System.out.println("2. Display Available Beds");
+        System.out.println("3. Display Occupied Beds");
+        System.out.println("4. Display Ward Summary");
+        System.out.println("5. Sort Patients by Surname");
+        System.out.println("6. Sort Patients by Patient ID");
+        System.out.println("7. Return to Main Menu");
+        System.out.print("Select an option: ");
+
+        try {
+
+            choice = Integer.parseInt(scanner.nextLine());
+
+            switch (choice) {
+
+                case 1:
+                    hospital.displayAllPatients();
+                    break;
+
+                case 2:
+                    hospital.displayAvailableBeds();
+                    break;
+
+                case 3:
+                    hospital.displayOccupiedBeds();
+                    break;
+
+                case 4:
+                    hospital.displayWardReport();
+                    break;
+
+                case 5:
+                    hospital.sortPatientsBySurname();
+                    System.out.println(
+                            "\nPatients sorted by surname.");
+                    hospital.displayAllPatients();
+                    break;
+
+                case 6:
+                    hospital.sortPatientsById();
+                    System.out.println(
+                            "\nPatients sorted by Patient ID.");
+                    hospital.displayAllPatients();
+                    break;
+
+                case 7:
+                    break;
+
+                default:
+                    System.out.println(
+                            "Invalid option. Please select 1 to 7.");
+            }
+
+        } catch (NumberFormatException e) {
+
+            System.out.println(
+                    "Invalid input. Please enter a number.");
+        }
     }
 }
 

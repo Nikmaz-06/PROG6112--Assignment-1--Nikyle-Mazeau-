@@ -346,4 +346,75 @@ public boolean bedsAvailable() {
 
     return getOccupiedBedCount() < 20;
 }
+
+/**
+ * Calculates the ward occupancy percentage.*/
+public double getOccupancyPercentage() {
+
+    return (getOccupiedBedCount() / 20.0) * 100;
+}
+
+/**
+ * Displays summary report*/
+public void displayWardReport() {
+
+    System.out.println("\n========== WARD REPORT ==========");
+
+    System.out.println("Total Registered Patients: "
+            + getTotalPatients());
+
+    System.out.println("Total Occupied Beds: "
+            + getOccupiedBedCount());
+
+    System.out.println("Total Available Beds: "
+            + (20 - getOccupiedBedCount()));
+
+    System.out.printf(
+            "Ward Occupancy Percentage: %.2f%%%n",
+            getOccupancyPercentage());
+
+    System.out.println("=================================");
+}
+
+/**
+ * Sorts patients alphabetically*/
+public void sortPatientsBySurname() {
+
+    for (int i = 0; i < patients.size() - 1; i++) {
+
+        for (int j = 0; j < patients.size() - 1 - i; j++) {
+
+            Patient first = patients.get(j);
+            Patient second = patients.get(j + 1);
+
+            if (first.getLastName().compareToIgnoreCase(
+                    second.getLastName()) > 0) {
+
+                patients.set(j, second);
+                patients.set(j + 1, first);
+            }
+        }
+    }
+}
+
+/**
+ * Sorts patients by Patient ID.*/
+public void sortPatientsById() {
+
+    for (int i = 0; i < patients.size() - 1; i++) {
+
+        for (int j = 0; j < patients.size() - 1 - i; j++) {
+
+            Patient first = patients.get(j);
+            Patient second = patients.get(j + 1);
+
+            if (first.getPatientId().compareToIgnoreCase(
+                    second.getPatientId()) > 0) {
+
+                patients.set(j, second);
+                patients.set(j + 1, first);
+            }
+        }
+    }
+}
 }

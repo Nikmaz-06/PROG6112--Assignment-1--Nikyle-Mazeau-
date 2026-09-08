@@ -42,7 +42,8 @@ public class HospitalAdmissionSystem {
 
     case 4:
         System.out.println("\nExiting MediCare Hospital System...");
-        System.out.println("Goodbye!");
+        System.out.println("Thank you for using MediCare services, have a good day4"
+                + "");
         break;
 
     default:

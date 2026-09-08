@@ -1,3 +1,27 @@
+/**
+* --------------------------------------------
+* CODE ATTRIBUTION
+* --------------------------------------------
+*Student Name: Nikyle Mazeau
+*Student Number: ST10469340 
+*Project: PROG6112 Assignment 1 - Hospital Admission system for medicare 
+*Date: 28 August 2026
+* Sources used: 
+*1. Farrell, J. (2023). Java Programming. 10th Edition. Cengage Learning.
+*- Used for OOP coding principles and structures, and
+*the best way in which to implement good, clean code.
+*2. Apache
+*NetBeans (2026):  
+* "Writing JUnit Tests in NetBeans IDE"
+*URL : https://netbeans.apache.org/tutorial/main/kb/docs/java/junit-intro/
+*3. Apache NetBeans (2026):
+* "NetBeans Java language infrastructure"
+*URL : https://netbeans.apache.org/tutorial/main/tutorials/nbm-copyfqn/
+*4. Oracle. (2026): 
+* "Java Platform SE Documentation"
+* URL : https://docs.oracle.com/javase/8/docs/api/
+*/
+
 package com.mycompany.hospitaladmissionsystem;
 
 import java.util.Scanner;
@@ -12,20 +36,20 @@ public class HospitalAdmissionSystem {
     private static final HospitalSystem hospital = new HospitalSystem();
 
    public static void main(String[] args) {
-
+       //Stores the users selected menu option
     int choice = 0;
-
+    //Diplay console heading when opening
     System.out.println("==========================================");
     System.out.println("   MEDICARE HOSPITAL ADMISSION SYSTEM");
     System.out.println("==========================================");
-
+    //Continue running app until user selects option
     while (choice != 4) {
 
         displayMainMenu();
-
+        //convert input into integer
         try {
             choice = Integer.parseInt(scanner.nextLine());
-
+               //dorect user to choice menu
            switch (choice) {
 
     case 1:
@@ -50,7 +74,7 @@ public class HospitalAdmissionSystem {
         System.out.println(
                 "\nInvalid option. Please select 1 to 4.");
 }
-
+           //prevents crahsing of the program when selecting options
         } catch (NumberFormatException e) {
             System.out.println(
                     "\nInvalid input. Please enter a number.");
@@ -81,16 +105,16 @@ public static void patientManagementMenu() {
 
         System.out.println(
                 "\n========== PATIENT MANAGEMENT ==========");
-        System.out.println("1. Register New Patient");
-        System.out.println("2. Search Patient");
-        System.out.println("3. Update Patient");
-        System.out.println("4. Delete Patient");
-        System.out.println("5. Display All Patients");
-        System.out.println("6. Return to Main Menu");
-        System.out.print("Select an option: ");
+        System.out.println("1. Register New Patient");//register new patient
+        System.out.println("2. Search Patient");//search a patient id
+        System.out.println("3. Update Patient");//update a patients current detials
+        System.out.println("4. Delete Patient");//delete a created patient and id
+        System.out.println("5. Display All Patients");//display all created patients in a list
+        System.out.println("6. Return to Main Menu");//return option to main menu
+        System.out.print("Select an option: ");//select option prompt to remind user
 
         try {
-
+            //convert input to a integer again
             choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
@@ -120,12 +144,12 @@ public static void patientManagementMenu() {
 
                 default:
                     System.out.println(
-                            "Invalid option. Please select 1 to 6.");
+                            "Invalid option. Please select 1 to 6.");//error validation message
             }
 
         } catch (NumberFormatException e) {
             System.out.println(
-                    "Invalid input. Please enter a number.");
+                    "Invalid input. Please enter a number.");//error validation on inut
         }
     }
 }
@@ -134,9 +158,9 @@ public static void patientManagementMenu() {
      * Captures patient information and registers a new patient.*/
     public static void registerPatient() {
 
-        System.out.println("\n--- REGISTER NEW PATIENT ---");
+        System.out.println("\n--- REGISTER NEW PATIENT ---");//register a new patient menu display
 
-        System.out.print("Enter Patient ID: ");
+        System.out.print("Enter Patient ID: ");//prompt for input
         String patientId = scanner.nextLine();
 
         // Prevent duplicate patient IDs.
@@ -389,13 +413,13 @@ public static void bedManagementMenu() {
 
         System.out.println(
                 "\n============ BED MANAGEMENT ============");
-        System.out.println("1. Allocate Bed");
-        System.out.println("2. Release Bed");
-        System.out.println("3. Display Ward Layout");
-        System.out.println("4. Display Available Beds");
-        System.out.println("5. Display Occupied Beds");
-        System.out.println("6. Return to Main Menu");
-        System.out.print("Select an option: ");
+        System.out.println("1. Allocate Bed");//allocate a bed to a patient
+        System.out.println("2. Release Bed");//release the patient from the bed
+        System.out.println("3. Display Ward Layout");//display the ward in a layout
+        System.out.println("4. Display Available Beds");//show non used beds
+        System.out.println("5. Display Occupied Beds");//show used beds
+        System.out.println("6. Return to Main Menu");//return option
+        System.out.print("Select an option: ");//prompt user for input
 
         try {
 

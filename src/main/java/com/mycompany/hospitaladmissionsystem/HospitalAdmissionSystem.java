@@ -289,7 +289,17 @@ public static void patientManagementMenu() {
         String medicalCondition = scanner.nextLine();
 
        
-        PatientCategory category = patient.getCategory();
+        System.out.println("\nCurrent Category: "
+        + patient.getCategory());
+
+System.out.println("Select New Patient Category:");
+
+PatientCategory category = selectCategory();
+
+if (category == null) {
+    System.out.println("Patient was not updated.");
+    return;
+}
 
         boolean updated = hospital.updatePatient(
                 patientId,

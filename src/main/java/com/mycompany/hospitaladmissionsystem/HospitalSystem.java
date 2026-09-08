@@ -59,44 +59,115 @@ private String[][] bedOccupants;
     /**
      * Updates an existing patient's details.
      */
-    public boolean updatePatient(String patientId,
-                                 String firstName,
-                                 String lastName,
-                                 int age,
-                                 String gender,
-                                 String medicalCondition,
-                                 PatientCategory category) {
+    /**
+ * Updates an existing patient's information.
+ * The patient object is replaced when changing
+ * between inpatient and non-inpatient categories.
+ */
+public boolean updatePatient(String patientId,
+                             String firstName,
+                             String lastName,
+                             int age,
+                             String gender,
+                             String medicalCondition,
+                             PatientCategory category) {
 
-        Patient patient = searchPatient(patientId);
+    Patient patient = searchPatient(patientId);
 
-        if (patient == null) {
-            return false;
-        }
+    if (patient == null) {
+        return false;
+    }
 
-        patient.setFirstName(firstName);
-        patient.setLastName(lastName);
-        patient.setAge(age);
-        patient.setGender(gender);
-        patient.setMedicalCondition(medicalCondition);
-        patient.setCategory(category);
+    int index = patients.indexOf(patient);
+
+    /*
+     * If the new category is INPATIENT but the existing
+     * object is not an Inpatient, replace it with one.
+     */
+    if (category == PatientCategory.INPATIENT
+            && !(patient instanceof Inpatient)) {
+
+        Inpatient inpatient = new Inpatient(
+                patientId,
+                firstName,
+                lastName,
+                age,
+                gender,
+                medicalCondition,
+                category,
+                1,
+                null
+        );
+
+        patients.set(index, inpatient);
 
         return true;
     }
+
+    /*
+     * If a patient changes from inpatient to out the  object is then replaced*/
+    if (patient instanceof Inpatient
+            && category != PatientCategory.INPATIENT) {
+
+        Inpatient inpatient = (Inpatient) patient;
+
+        if (inpatient.getBedNumber() != null) {
+            releaseBed(patientId);
+        }
+
+        Patient updatedPatient = new Patient(
+                patientId,
+                firstName,
+                lastName,
+                age,
+                gender,
+                medicalCondition,
+                category
+        );
+
+        patients.set(index, updatedPatient);
+
+        return true;
+    }
+
+    // No object type change is required.
+    patient.setFirstName(firstName);
+    patient.setLastName(lastName);
+    patient.setAge(age);
+    patient.setGender(gender);
+    patient.setMedicalCondition(medicalCondition);
+    patient.setCategory(category);
+
+    return true;
+}
 
     /**
      * Deletes a patient using the Patient ID.
      */
-    public boolean deletePatient(String patientId) {
+ /**
+ * Deletes a patient using their Patient ID*/
+public boolean deletePatient(String patientId) {
 
-        Patient patient = searchPatient(patientId);
+    Patient patient = searchPatient(patientId);
 
-        if (patient == null) {
-            return false;
-        }
-
-        patients.remove(patient);
-        return true;
+    if (patient == null) {
+        return false;
     }
+
+    // Release the bed before deleting an inpatient.
+    if (patient instanceof Inpatient) {
+
+        Inpatient inpatient = (Inpatient) patient;
+
+        if (inpatient.getBedNumber() != null) {
+            releaseBed(patientId);
+        }
+    }
+
+    patients.remove(patient);
+
+    return true;
+}
 
     /**
      * Displays all registered patients.

@@ -6,7 +6,7 @@ package com.mycompany.hospitaladmissionsystem;
  */
 public class Patient {
 
-    // Patient information is private to support encapsulation.
+    // Patient information is set to private for encapsulation.
     private String patientId;
     private String firstName;
     private String lastName;

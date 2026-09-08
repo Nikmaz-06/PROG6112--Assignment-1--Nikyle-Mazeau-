@@ -2,8 +2,6 @@ package com.mycompany.hospitaladmissionsystem;
 
 /**
  * Represents an inpatient who requires a hospital bed.
- * This class inherits the basic patient information
- * from the Patient class.
  */
 public class Inpatient extends Patient {
 
@@ -13,8 +11,6 @@ public class Inpatient extends Patient {
 
     /**
      * Constructor for creating an inpatient.
-     * The super() method sends the inherited patient
-     * information to the Patient constructor.
      */
     public Inpatient(String patientId, String firstName, String lastName,
                      int age, String gender, String medicalCondition,
